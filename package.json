@@ -1,18 +1,18 @@
 {
+  "type": "module",
   "name": "dadbot",
   "version": "1.0.0",
   "description": "Discord dad joke bot",
   "main": "dadbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node -r esm dadbot.js"
+    "start": "node dadbot.js"
   },
   "author": "Andrew Fairbairn",
   "license": "ISC",
   "dependencies": {
-    "@ffflorian/icanhazdadjoke": "^2.0.1",
     "discord.js": "^12.4.1",
-    "esm": "^3.2.25",
+    "dotenv": "^8.2.0",
     "giphy-js-sdk-core": "^1.0.6"
   }
 }

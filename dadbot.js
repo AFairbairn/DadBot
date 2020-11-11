@@ -1,35 +1,41 @@
 const Discord = require('discord.js');
-const { PREFIX, TOKEN, GIPHY_API } = require("./config.json")
+const { PREFIX } = require("./config.json");
+require('dotenv').config();
 const client = new Discord.Client();
 
-import { ICanHazDadJoke } from '@ffflorian/icanhazdadjoke';
-const iCanHazDadJoke = new ICanHazDadJoke();
-
-
-let GphApiClient = require("giphy-js-sdk-core");
-let giphy = GphApiClient(GIPHY_API);
+var GphApiClient = require("giphy-js-sdk-core")
+giphy = GphApiClient(process.env.GIPHY_API)
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on('message', msg => {
-    let joke = "";
+
     if (msg.content.toLowerCase().startsWith(`${PREFIX}joke`)) {
-        iCanHazDadJoke.api.getRandom().then(result => {
-            joke = result.joke;
-        }).then(giphy.search("gifs", { "q": "laughing" })
+        let joke = "";
+        fetch("https://icanhazdadjoke.com/", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        })
+            .then(async (response) => {
+                let data = await response.json();
+                joke = data.joke;
+                return giphy.search("gifs", { "q": "laughing" })
+            })
             .then((response) => {
-                let gifs = response.data.length();
-                let index = Math.floor((Math.random() * 10) + 1) % gifs;
-                let laughing = response.data[index];
-                msg.channel.send(joke + {
-                    files: [laughing.images.fixed_height.url]
+                let len = response.data.length;
+                let index = Math.floor((Math.random() * 10) + 1) % len;
+                let gif = response.data[index];
+                msg.channel.send(joke, {
+                    files: [gif.images.fixed_height.url]
                 });
-            }).catch(() => {
+            })
+            .catch(() => {
                 msg.channel.send("🤒 I'm not feeling well.")
             })
-        )
     }
 });
 
@@ -40,6 +46,4 @@ client.on('message', msg => {
     }
 });
 
-
-
-client.login(TOKEN);
+client.login(process.env.TOKEN);
