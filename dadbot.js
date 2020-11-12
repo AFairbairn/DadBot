@@ -36,6 +36,17 @@ client.on('message', msg => {
             .catch(() => {
                 msg.channel.send("🤒 I'm not feeling well.")
             })
+    } else if (msg.content.toLowerCase().startsWith(`${PREFIX}dance`)) {
+        giphy.search("gifs", { "q": "dance" })
+            .then((response) => {
+                let len = response.data.length;
+                let index = Math.floor((Math.random() * 10) + 1) % len;
+                let gif = response.data[index];
+                msg.channel.send({
+                    files: [gif.images.fixed_height.url]
+                });
+            })
+
     }
 });
 
