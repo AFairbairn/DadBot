@@ -33,8 +33,9 @@ client.on('message', msg => {
                     files: [gif.images.fixed_height.url]
                 });
             })
-            .catch(() => {
+            .catch((e) => {
                 msg.channel.send("🤒 I'm not feeling well.")
+                console.error(e);
             })
     } else if (msg.content.toLowerCase().startsWith(`${PREFIX}dance`)) {
         giphy.search("gifs", { "q": "dance" })
@@ -46,7 +47,10 @@ client.on('message', msg => {
                     files: [gif.images.fixed_height.url]
                 });
             })
-
+            .catch((e) => {
+                msg.channel.send("🤒 I'm not feeling well.")
+                console.error(e);
+            })
     } else if (msg.content.toLowerCase().startsWith(`${PREFIX}advice`)) {
         fetch("https://badadvice.rest/api/random", {
             method: "GET"
@@ -54,6 +58,10 @@ client.on('message', msg => {
             .then(async (response) => {
                 let advice = await response.json();
                 msg.channel.send(advice);
+            })
+            .catch((e) => {
+                msg.channel.send("🤒 I'm not feeling well.")
+                console.error(e);
             })
     }
 });
