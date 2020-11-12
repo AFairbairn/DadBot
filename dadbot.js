@@ -47,13 +47,23 @@ client.on('message', msg => {
                 });
             })
 
+    } else if (msg.content.toLowerCase().startsWith(`${PREFIX}advice`)) {
+        fetch("https://badadvice.rest/api/random", {
+            method: "GET"
+        })
+            .then(async (response) => {
+                let advice = await response.json();
+                msg.channel.send(advice);
+            })
     }
 });
 
 client.on('message', msg => {
     if (msg.content.toLowerCase().startsWith(`${PREFIX}dadbot`)) {
-        //msg.reply(`Hello ${name}`);
-        msg.channel.send("🧔 Want to hear a joke? Type !joke.");
+        msg.channel.send("🧔 What I can do:\
+         \n- Want to hear a joke? Type !joke.\
+         \n- Want to see a dance? Type !dance.\
+         \n- Need some advice? Type !advice.");
     }
 });
 
